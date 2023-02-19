@@ -25,4 +25,23 @@ xlabel('Ts');
 xticks(-3:Ts:3)
 xticklabels({'-3Ts','-2Ts','-Ts','0','Ts','2Ts','3Ts'});
 legend('\alpha = 0', '\alpha = 0.25', '\alpha = 0.75',  '\alpha = 1')
-hold off
+
+%------------------------Punto 2.1.4------------------------------
+
+pt2_0 = rcosdesign(a_0,6,L,'sqrt'); %Version muestreada del pulso de coseno alzado
+pt2_0_25 = rcosdesign(a_0_25,6,L,'sqrt');
+pt2_0_75 = rcosdesign(a_0_75,6,L,'sqrt');
+pt2_1 = rcosdesign(a_1,6,L,'sqrt');
+
+
+figure(2)
+plot (t,pt_0,'DisplayName','\alpha = 0')
+grid on
+hold on
+plot (t,pt2_0_25,'DisplayName','\alpha = 0.25')
+plot (t,pt2_0_75,'DisplayName','\alpha = 0.75')
+plot (t,pt2_1,'DisplayName','\alpha = 1')
+xlabel('Ts');
+xticks(-3:Ts:3)
+xticklabels({'-3Ts','-2Ts','-Ts','0','Ts','2Ts','3Ts'});
+legend('\alpha = 0', '\alpha = 0.25', '\alpha = 0.75',  '\alpha = 1')
