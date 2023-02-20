@@ -17,7 +17,7 @@ Ns = 1389;                                       % Cantidad de bits
 data_bit = (rand(1,Ns)>0.5);              % Está correcto ya que se genera un vector de dimensión Ns y convierte a valores booleanos
 
 %%%%%%%%%<3. Unipolar a Bipolar (modulacion de amplitud)>%%%%%%%%%%%%%%
-amp_modulated = 2*data_bit-1; % 0=> -1,  1=>1
+amp_modulated = 2*ceil (rand( 1,Ns)*4) -5;
 
 %%%%%%%%%<4.  Modulacion de pulsos >%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 impulse_modulated = [];
