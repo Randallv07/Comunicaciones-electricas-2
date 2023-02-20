@@ -13,7 +13,7 @@ pt = rcosdesign(0.25,6,L,'normal');                             % Genera los pun
 pt = pt/(max(abs(pt))); %rescaling to match rcosine, está correcto ya que divide todos los puntos por el máximo valor del coseno alzado
 
 %%%%%%%%%<2. Generacion de 100 simbolos binarios >%%%%%%%%%%%%%%%%%%%%
-Ns = 100;                                       % Cantidad de bits
+Ns = 1668;                                       % Cantidad de bits
 data_bit = (rand(1,Ns)>0.5);              % Está correcto ya que se genera un vector de dimensión Ns y convierte a valores booleanos
 
 %%%%%%%%%<3. Unipolar a Bipolar (modulacion de amplitud)>%%%%%%%%%%%%%%
@@ -44,3 +44,17 @@ plot(t_step:t_step:(t_step*length(tx_signal)), tx_signal);
 axis([0 Ns*Ts -2*max(tx_signal) 2*max(tx_signal)]);
 grid on
 title ('pulse shaped')
+
+
+
+figure(200)
+for k=3:floor(Ns/2) - 1         % representa la k-esima muestra
+    tmp = tx_signal(((k - 1)*2*L + 1) : (k*2*L));
+    plot( t_step*(0:(2*L - 1)), tmp);
+    axis([0 2 min(tx_signal) max(tx_signal)]);
+    grid on;
+    hold on
+%     pause
+end
+hold off
+
