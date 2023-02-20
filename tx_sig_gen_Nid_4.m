@@ -17,7 +17,8 @@ Ns = 1389;                                       % Cantidad de bits
 data_bit = (rand(1,Ns)>0.5);              % Está correcto ya que se genera un vector de dimensión Ns y convierte a valores booleanos
 
 %%%%%%%%%<3. Unipolar a Bipolar (modulacion de amplitud)>%%%%%%%%%%%%%%
-amp_modulated = 2*ceil(rand(1, Ns)*4) - 5;
+%amp_modulated = 2*ceil(rand(1, Ns)*4) - 5; % Para M = 4
+amp_modulated = 2*data_bit-1;       % Para M = 2
 
 %%%%%%%%%<4.  Modulacion de pulsos >%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 impulse_modulated = [];
@@ -33,7 +34,7 @@ tx_signal = conv(impulse_modulated, pt);        % Convoluciona la señal modulad
 
 %-------------------Se agrega para el matched filter-----------------------
 matched_out = conv(tx_signal, pt)/100;
-
+                                                                    
 figure(100)
 subplot (2,1,1)
 stem( t_step: t_step: (Ns*Ts), impulse_modulated, '.');
@@ -57,8 +58,11 @@ end
 
 hold off
 
-
-figure ( 300 )
-pwelch ( tx_signal , L*8 , [ ] , 2048 ,16 );
-axis ( [ 0 1 -10 15])
+figure(300)
+pwelch(tx_signal , L*8 , [ ] , 2048 ,16 );
+axis([0 1 -10 15]);
+legend ( 'r =0' , 'r =0.5' , 'r =0.7' , 'r =1')
 hold on
+
+
+
