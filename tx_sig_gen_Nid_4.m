@@ -8,12 +8,12 @@ t_step = Ts/L; % Tamaño del paso para muestreo, es correcto ya que divide el ti
                      %dando el tiempo entre muestras
 
 %%%%%%%%%<1. Generacion de onda del pulso > %%%%%%%%%%%%%%%%%%%%%%
-pt = rcosdesign(0.5,6,L,'normal');                             % Genera los puntos del coseno alzado con factor de rodamiento de 0.25, 6 tiempos de símbolo
+pt = rcosdesign(0.25,6,L,'normal');                             % Genera los puntos del coseno alzado con factor de rodamiento de 0.25, 6 tiempos de símbolo
                                                                               % y 100 muestras por símbolo
 pt = pt/(max(abs(pt))); %rescaling to match rcosine, está correcto ya que divide todos los puntos por el máximo valor del coseno alzado
 
 %%%%%%%%%<2. Generacion de 100 simbolos binarios >%%%%%%%%%%%%%%%%%%%%
-Ns = 100;                                       % Cantidad de bits
+Ns = 1389;                                       % Cantidad de bits
 data_bit = (rand(1,Ns)>0.5);              % Está correcto ya que se genera un vector de dimensión Ns y convierte a valores booleanos
 
 %%%%%%%%%<3. Unipolar a Bipolar (modulacion de amplitud)>%%%%%%%%%%%%%%
