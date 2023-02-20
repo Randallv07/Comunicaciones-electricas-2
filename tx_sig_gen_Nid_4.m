@@ -8,7 +8,7 @@ t_step = Ts/L; % Tamaño del paso para muestreo, es correcto ya que divide el ti
                      %dando el tiempo entre muestras
 
 %%%%%%%%%<1. Generacion de onda del pulso > %%%%%%%%%%%%%%%%%%%%%%
-pt = rcosdesign(0.25,6,L,'normal');                             % Genera los puntos del coseno alzado con factor de rodamiento de 0.25, 6 tiempos de símbolo
+pt = rcosdesign(0.5,6,L,'normal');                             % Genera los puntos del coseno alzado con factor de rodamiento de 0.25, 6 tiempos de símbolo
                                                                               % y 100 muestras por símbolo
 pt = pt/(max(abs(pt))); %rescaling to match rcosine, está correcto ya que divide todos los puntos por el máximo valor del coseno alzado
 
@@ -30,6 +30,10 @@ end
 %%%%%%%%<5.Formacion de pulsos (filtrado de transmision)>%%%%%%%%%%
 tx_signal = conv(impulse_modulated, pt);        % Convoluciona la señal modulada con la función de transferencia del filtro (coseno alzado) y da
                                                                     % como resultado la señal teóricamente sin ISI
+
+%-------------------Se agrega para el matched filter-----------------------
+matched_out = conv(tx_signal, pt)/100;
+
 figure(100)
 subplot (2,1,1)
 stem( t_step: t_step: (Ns*Ts), impulse_modulated, '.');
@@ -44,9 +48,9 @@ title ('pulse shaped')
 
 figure(200)
 for k=3:floor(Ns/2)-1 %k representa la k-ésima muestra
-    tmp = tx_signal(((k-1)*2*L+1): (k*2*L));
+    tmp = matched_out(((k-1)*2*L+1): (k*2*L));
     plot(t_step*(0:(2*L-1)), tmp);
-    axis([0 2 min(tx_signal) max(tx_signal)]);
+    axis([0 2 min(matched_out) max(matched_out)]);
     grid on; hold on
     %pause
 end
@@ -54,4 +58,7 @@ end
 hold off
 
 
-
+figure ( 300 )
+pwelch ( tx_signal , L*8 , [ ] , 2048 ,16 );
+axis ( [ 0 1 -10 15])
+hold on
