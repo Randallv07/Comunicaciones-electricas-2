@@ -8,7 +8,7 @@ t_step = Ts/L; % Tamaño del paso para muestreo, es correcto ya que divide el ti
                      %dando el tiempo entre muestras
 
 %%%%%%%%%<1. Generacion de onda del pulso > %%%%%%%%%%%%%%%%%%%%%%
-pt = rcosdesign(0.5,6,L,'normal');                             % Genera los puntos del coseno alzado con factor de rodamiento de 0.25, 6 tiempos de símbolo
+pt = rcosdesign(1,6,L,'normal');                             % Genera los puntos del coseno alzado con factor de rodamiento de 0.25, 6 tiempos de símbolo
                                                                               % y 100 muestras por símbolo
 pt = pt/(max(abs(pt))); %rescaling to match rcosine, está correcto ya que divide todos los puntos por el máximo valor del coseno alzado
 
@@ -17,7 +17,7 @@ Ns = 1389;                                       % Cantidad de bits
 data_bit = (rand(1,Ns)>0.5);              % Está correcto ya que se genera un vector de dimensión Ns y convierte a valores booleanos
 
 %%%%%%%%%<3. Unipolar a Bipolar (modulacion de amplitud)>%%%%%%%%%%%%%%
-amp_modulated = 2*ceil(rand(1, Ns)*4) - 5; % Para M = 4
+%amp_modulated = 2*ceil(rand(1, Ns)*4) - 5; % Para M = 4
 amp_modulated = 2*data_bit-1;       % Para M = 2
 
 %%%%%%%%%<4.  Modulacion de pulsos >%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -31,7 +31,9 @@ end
 %%%%%%%%<5.Formacion de pulsos (filtrado de transmision)>%%%%%%%%%%
 tx_signal = conv(impulse_modulated, pt);        % Convoluciona la señal modulada con la función de transferencia del filtro (coseno alzado) y da
                                                 % como resultado la señal teóricamente sin ISI
-matched_out = conv(tx_signal, pt)/100;
+rx_signal = tx_signal + 0.15*randn(1, length(tx_signal));                                                
+matched_out = conv(rx_signal, pt)/100;
+
                                                                     
 figure(100)
 subplot (2,1,1)
