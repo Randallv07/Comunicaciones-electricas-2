@@ -41,3 +41,17 @@ plot(t_step:t_step:(t_step*length(tx_signal)), tx_signal);
 axis([0 Ns*Ts -2*max(tx_signal) 2*max(tx_signal)]);
 grid on
 title ('pulse shaped')
+
+figure(200)
+for k=3 : floor(Ns/2) - 1       % representa la k - esima muestra
+    tmp = tx_signal(((k-1)*2*L + 1) : (k*2*L));
+    plot(t_step * (0 : (2*L-1)), tmp);
+    axis([0 2 min(tx_signal) max(tx_signal)]);
+    grid on;
+    hold on;
+    pause
+end
+
+hold off;
+
+
