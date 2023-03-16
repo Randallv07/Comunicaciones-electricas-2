@@ -120,5 +120,9 @@ print('----------------------')
 for (char, frequency) in freq:
     print(' %-4r |%12s' % (char, huffmanCode[char]))
 
+entropia = 0
 
+for (char, frequency) in freq:
+    entropia += frequency*log2(1/frequency)
 
+print(entropia)
