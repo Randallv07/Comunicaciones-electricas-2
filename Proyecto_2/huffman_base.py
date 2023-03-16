@@ -102,6 +102,7 @@ for c in string:
 
 freq = sorted(freq.items(), key=lambda x: x[1], reverse=True)
 
+
 nodes = freq
 
 while len(nodes) > 1:
@@ -115,27 +116,31 @@ while len(nodes) > 1:
 
 huffmanCode = huffman_code_tree(nodes[0][0])
 
-entropia = 0
-L_media = 0
-L_media_o = 0
-
 print(' Char | Huffman code ')
 print('----------------------')
+H=0
+L=0
+
 for (char, frequency) in freq:
     print(' %-4r |%12s' % (char, huffmanCode[char]))
-    # Se calcula la entropia de la fuente
-    entropia += frequency*log2(1/frequency)
-    L_media += frequency*len(huffmanCode[char])
-    L_media_o += frequency*len(bin(char)[2:])
+    H = frequency*log2(1/frequency)+H       #Se calcula la entropia de la fuente
+    L = frequency*len(huffmanCode[char])+L  #Se calcula lo longitud promedio de la codificación de Huffmann
+    
 
-eta_orig = entropia/L_media_o
-eta_new = entropia/L_media
-var = 0
+sigma=0
 for (char, frequency) in freq:
-    var += frequency*(len(huffmanCode[char])-L_media)**2
+    sigma = frequency*(len(huffmanCode[char])-L)**2+sigma  #Se calcula la varianza del código
 
-print("La entropia de la fuente es: ", entropia)
-print("La longitud media del código es: ", L_media)
-print("La varianza del codigo de huffman es: ", var)
-print("La eficiencia con la codificacion original es: ", eta_orig)
-print("La eficiencia con la codificacion nueva es: ", eta_new)
+n_orig = H/8       #Se calcula la eficiencia con el código original, los caracy¿teres siempre son de 8 bits
+
+if L==0:
+    n_new = "No aplica ya que solo se está enviando un único caracter"
+else:
+    n_new  = H/L       #Se calcula la eficiencia del código nuevo 
+
+
+print("La entropia de la fuente es:",H)
+print("La longitud media del código es:",L)
+print("La varianza del código es:",sigma)
+print("La eficiencia del código original:",n_orig)
+print("La eficiencia de nuevo código:",n_new)
