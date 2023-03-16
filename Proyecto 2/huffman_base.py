@@ -115,10 +115,56 @@ while len(nodes) > 1:
 
 huffmanCode = huffman_code_tree(nodes[0][0])
 
+# Entropia de la fuente
+
+Hent = 0
+for i in range(len(freq)):
+    Hent = Hent + freq[i][1]*log2(1/freq[i][1])
+
+# Longitud media del codigo Huffman generado
+
+Lprom = 0
+for (char, frequency) in freq:
+    Lprom = Lprom + frequency*len(huffmanCode[char])
+
+# Varianza del codigo de Huffman 
+
+Var = 0
+for (char, frequency) in freq:
+    Var = Var + frequency*(len(huffmanCode[char])-Lprom)**2
+
+# Eficiencia de la codificacion original
+
+eta_o = 0
+Lprom_o = 0
+for (char, frequency) in freq:
+    Lprom_o = Lprom_o + frequency*len(bin(char)[2::])
+
+for (char, frequency) in freq:
+    eta_o =  Hent/Lprom_o
+
+# Eficiencia del nuevo codigo
+
+eta_n = 0
+for (char, frequency) in freq:
+    eta_n = Hent/Lprom
+
 print(' Char | Huffman code ')
 print('----------------------')
 for (char, frequency) in freq:
     print(' %-4r |%12s' % (char, huffmanCode[char]))
+
+print("\n")
+print("La entropía es            :", Hent)
+print("La longitud promedio es   :", Lprom)
+print("La varianza es            :", Var)
+print("La eficiencia original es :", eta_o)
+print("La eficiencia nueva es    :", eta_n)
+print("\n")
+
+
+
+
 
 
 
