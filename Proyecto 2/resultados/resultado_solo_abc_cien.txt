@@ -1,0 +1,33 @@
+ Char | Huffman code 
+----------------------
+ 65   |        0001
+ 66   |        0000
+ 67   |        0011
+ 68   |        0010
+ 69   |       10101
+ 70   |       10100
+ 71   |       10111
+ 72   |       10110
+ 73   |       10001
+ 74   |       10000
+ 75   |       10011
+ 76   |       10010
+ 77   |       11101
+ 78   |       11100
+ 79   |       11111
+ 80   |       11110
+ 81   |       11001
+ 82   |       11000
+ 83   |       11011
+ 84   |       11010
+ 85   |       01101
+ 86   |       01100
+ 87   |       01111
+ 88   |       01110
+ 89   |        0101
+ 90   |        0100
+La entropia de la fuente es:  4.700439718141098
+La longitud media del código es:  4.769230769230777
+La varianza del codigo de huffman es:  0.17751479289940864
+La eficiencia con la codificacion original es:  0.6714913883058697
+La eficiencia con la codificacion nueva es:  0.9855760699328092
