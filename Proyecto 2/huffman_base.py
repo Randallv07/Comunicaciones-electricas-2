@@ -115,14 +115,17 @@ while len(nodes) > 1:
 
 huffmanCode = huffman_code_tree(nodes[0][0])
 
+entropia = 0
+L_media = 0
+
 print(' Char | Huffman code ')
 print('----------------------')
 for (char, frequency) in freq:
     print(' %-4r |%12s' % (char, huffmanCode[char]))
-
-entropia = 0
-
-for (char, frequency) in freq:
+    # Se calcula la entropia de la fuente
     entropia += frequency*log2(1/frequency)
+    L_media += frequency*len(huffmanCode[char])
 
-print(entropia)
+
+print("La entropia de la fuente es: ", entropia)
+print("La longitud media del código es: ", L_media)
