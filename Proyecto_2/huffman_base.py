@@ -120,19 +120,24 @@ print(' Char | Huffman code ')
 print('----------------------')
 H=0
 L=0
-L_orig=0
+
 for (char, frequency) in freq:
     print(' %-4r |%12s' % (char, huffmanCode[char]))
     H = frequency*log2(1/frequency)+H       #Se calcula la entropia de la fuente
     L = frequency*len(huffmanCode[char])+L  #Se calcula lo longitud promedio de la codificación de Huffmann
-    L_orig = len(bin(char)[2::])*frequency+L_orig #Se calcula la longitud promedio de la codificación original
+    
 
 sigma=0
 for (char, frequency) in freq:
     sigma = frequency*(len(huffmanCode[char])-L)**2+sigma  #Se calcula la varianza del código
 
-n_orig = H/L_orig  #Se calcula la eficiencia con el código original
-n_new  = H/L       #Se calcula la eficiencia del código nuevo 
+n_orig = H/8       #Se calcula la eficiencia con el código original, los caracy¿teres siempre son de 8 bits
+
+if L==0:
+    n_new = "No aplica ya que solo se está enviando un único caracter"
+else:
+    n_new  = H/L       #Se calcula la eficiencia del código nuevo 
+
 
 print("La entropia de la fuente es:",H)
 print("La longitud media del código es:",L)
