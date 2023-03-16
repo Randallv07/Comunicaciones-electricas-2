@@ -126,6 +126,10 @@ for (char, frequency) in freq:
     entropia += frequency*log2(1/frequency)
     L_media += frequency*len(huffmanCode[char])
 
+var = 0
+for (char, frequency) in freq:
+    var += frequency*(len(huffmanCode[char])-L_media)**2
 
 print("La entropia de la fuente es: ", entropia)
 print("La longitud media del código es: ", L_media)
+print("La varianza del codigo de huffman", var)
