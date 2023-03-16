@@ -117,6 +117,7 @@ huffmanCode = huffman_code_tree(nodes[0][0])
 
 entropia = 0
 L_media = 0
+L_media_o = 0
 
 print(' Char | Huffman code ')
 print('----------------------')
@@ -125,11 +126,16 @@ for (char, frequency) in freq:
     # Se calcula la entropia de la fuente
     entropia += frequency*log2(1/frequency)
     L_media += frequency*len(huffmanCode[char])
+    L_media_o += frequency*len(bin(char)[2:])
 
+eta_orig = entropia/L_media_o
+eta_new = entropia/L_media
 var = 0
 for (char, frequency) in freq:
     var += frequency*(len(huffmanCode[char])-L_media)**2
 
 print("La entropia de la fuente es: ", entropia)
 print("La longitud media del código es: ", L_media)
-print("La varianza del codigo de huffman", var)
+print("La varianza del codigo de huffman es: ", var)
+print("La eficiencia con la codificacion original es: ", eta_orig)
+print("La eficiencia con la codificacion nueva es: ", eta_new)
