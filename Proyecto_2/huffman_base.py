@@ -3,6 +3,7 @@ import sys
 import getopt
 import csv
 from math import log2
+import struct
 
 # Parametros de entrada y ayuda:
 file_full_path = ""
@@ -144,3 +145,37 @@ print("La longitud media del código es:",L)
 print("La varianza del código es:",sigma)
 print("La eficiencia del código original:",n_orig)
 print("La eficiencia de nuevo código:",n_new)
+
+binary_string = [];
+for c in string :
+    binary_string += huffmanCode[c]
+
+compressed_length_bit = len(binary_string)
+if (compressed_length_bit %8 >0) :
+    for i in range(8 - len(binary_string) % 8):
+        binary_string += '0'
+        
+byte_string="".join ([str(i) for i in binary_string])
+byte_string=[byte_string[i:i+8] for i in range (0, len(byte_string),8)];
+
+Lista_byte = [byte.encode() for byte in byte_string]
+
+with open(file_huffman_comprimido, 'wb') as archivo_binario:
+    for byte in Lista_byte:
+        archivo_binario.write(byte)
+
+#print(Lista_byte)
+print(type(Lista_byte[1]))
+
+sin_compresion = len(string)
+
+csvfile=open(ruta_diccionario,'w')
+writer=csv.writer(csvfile)
+writer.writerow([str(compressed_length_bit/8),"bits comprimidos"])
+writer.writerow([str(sin_compresion),"bits sin comprimir"])
+writer.writerow([str((compressed_length_bit/8)/sin_compresion*100)," por ciento de tasa de compresión"])
+
+for entrada in huffmanCode :
+    writer.writerow([str(entrada), huffmanCode[entrada]])
+    
+csvfile . close ()
