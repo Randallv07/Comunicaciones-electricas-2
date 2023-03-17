@@ -166,6 +166,8 @@ print("\n")
 #-       COMPRESION POR MEDIO DEL CODIGO DE HUFFMAN        -
 #-----------------------------------------------------------
 
+# Codigo para el punto 2.3.1
+
 binary_string = []
 for c in string:
     binary_string += huffmanCode[c]
@@ -178,3 +180,43 @@ if(compressed_length_bit %8>0):
 
 byte_string="".join([str(i) for i in binary_string])
 byte_string=[byte_string[i:i+8] for i in range(0, len(byte_string), 8)]
+
+# Codigo para el punto 2.3.2
+binary_bytes = [byte.encode() for byte in byte_string]
+
+with open(file_huffman_comprimido,'wb') as archivo_binario:
+    for byte in binary_bytes:
+        archivo_binario.write(byte)
+
+# Codigo para el punto 2.3.3
+
+csvfile = open(ruta_diccionario, 'w')
+writer = csv.writer(csvfile)
+writer.writerow([str(compressed_length_bit), "bits"])
+
+for entrada in huffmanCode:
+    writer.writerow([str(entrada), huffmanCode[entrada]])
+
+csvfile.close()
+
+# Codigo para el punto 2.3.4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
