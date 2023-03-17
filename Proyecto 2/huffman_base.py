@@ -136,18 +136,17 @@ for (char, frequency) in freq:
 # Eficiencia de la codificacion original
 
 eta_o = 0
-Lprom_o = 0
 for (char, frequency) in freq:
-    Lprom_o = Lprom_o + frequency*len(bin(char)[2::])
-
-for (char, frequency) in freq:
-    eta_o =  Hent/Lprom_o
+    eta_o =  Hent/8
 
 # Eficiencia del nuevo codigo
 
 eta_n = 0
 for (char, frequency) in freq:
-    eta_n = Hent/Lprom
+    if Lprom==0:
+        eta_n = "NA"
+    else:
+        eta_n = Hent/Lprom
 
 print(' Char | Huffman code ')
 print('----------------------')
@@ -163,8 +162,19 @@ print("La eficiencia nueva es    :", eta_n)
 print("\n")
 
 
+#-----------------------------------------------------------
+#-       COMPRESION POR MEDIO DEL CODIGO DE HUFFMAN        -
+#-----------------------------------------------------------
 
+binary_string = []
+for c in string:
+    binary_string += huffmanCode[c]
 
+compressed_length_bit = len(binary_string)
 
+if(compressed_length_bit %8>0):
+    for i in range(8 - len(binary_string) % 8):
+        binary_string += '0'
 
-
+byte_string="".join([str(i) for i in binary_string])
+byte_string=[byte_string[i:i+8] for i in range(0, len(byte_string), 8)]
