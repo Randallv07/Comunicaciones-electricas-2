@@ -2,6 +2,7 @@ import os
 import sys
 import getopt
 import csv
+import math
 from math import log2
 
 # Parametros de entrada y ayuda:
@@ -166,7 +167,9 @@ print("\n")
 #-       COMPRESION POR MEDIO DEL CODIGO DE HUFFMAN        -
 #-----------------------------------------------------------
 
-# Codigo para el punto 2.3.1
+##############################
+# Codigo para el punto 2.3.1 #
+##############################
 
 binary_string = []
 for c in string:
@@ -188,7 +191,9 @@ with open(file_huffman_comprimido,'wb') as archivo_binario:
     for byte in binary_bytes:
         archivo_binario.write(byte)
 
-# Codigo para el punto 2.3.3
+##############################
+# Codigo para el punto 2.3.3 #
+##############################
 
 csvfile = open(ruta_diccionario, 'w')
 writer = csv.writer(csvfile)
@@ -199,24 +204,21 @@ for entrada in huffmanCode:
 
 csvfile.close()
 
-# Codigo para el punto 2.3.4
+##############################
+# Codigo para el punto 2.3.4 #
+##############################
 
+original_size = os.path.getsize(file_full_path)
+compress_size = math.floor(compressed_length_bit/8)
 
+if original_size==compress_size:
+    tasa = "No se realiza compresión"
+else:
+    tasa = compressed_length_bit/(original_size*8)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+print("El tamaño original en bytes es        :", original_size)
+print("El tamaño de la versión comprimida es :", compress_size)
+print("La tasa de compresión es              :", tasa)
 
 
 
