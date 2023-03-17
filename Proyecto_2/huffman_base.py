@@ -2,6 +2,7 @@ import os
 import sys
 import getopt
 import csv
+import math
 from math import log2
 
 # Parametros de entrada y ayuda:
@@ -139,8 +140,60 @@ else:
     n_new  = H/L       #Se calcula la eficiencia del código nuevo 
 
 
-print("La entropia de la fuente es:",H)
-print("La longitud media del código es:",L)
-print("La varianza del código es:",sigma)
-print("La eficiencia del código original:",n_orig)
-print("La eficiencia de nuevo código:",n_new)
+print("-La entropia de la fuente es:",H)
+print("-La longitud media del código es:",L)
+print("-La varianza del código es:",sigma)
+print("-La eficiencia del código original:",n_orig)
+print("-La eficiencia de nuevo código:",n_new)
+
+
+#-----------------------------------------------------------
+#-       COMPRESION POR MEDIO DEL CODIGO DE HUFFMAN        -
+#-----------------------------------------------------------
+
+binary_string = []
+for c in string:
+    binary_string += huffmanCode[c]
+
+compressed_length_bit = len(binary_string)
+
+if(compressed_length_bit %8>0):
+    for i in range(8 - len(binary_string) % 8):
+        binary_string += '0'
+
+byte_string="".join([str(i) for i in binary_string])
+byte_string=[byte_string[i:i+8] for i in range(0, len(byte_string), 8)]
+
+
+
+lista_bytes = [byte.encode() for byte in byte_string]   #Convierte los datos comprimidos a una lista de datos tipo byte
+
+#Genera el archivo .bin
+with open(file_huffman_comprimido, 'wb') as archivo_binario:
+    for byte in lista_bytes:
+        archivo_binario.write(byte)
+
+#Genera el archivo csv
+csvfile = open ( ruta_diccionario , 'w')
+writer = csv.writer ( csvfile )
+writer . writerow ([ str ( compressed_length_bit ) ,"bits"])
+
+for entrada in huffmanCode :
+   writer.writerow ([str(entrada) , huffmanCode [ entrada ]])
+
+csvfile.close ()
+
+
+#Tamaño del archivo original y el archivo comprimido
+tamaño_original = os.path.getsize(file_full_path) 
+print("-El tamaño original del archivo es:", tamaño_original, "bytes")
+tamaño_new = math.floor(compressed_length_bit/8)   #pasa el tamaño a bytes
+print("-El tamaño del archivo comprimido es",tamaño_new,"bytes")
+
+
+if tamaño_original == tamaño_new:
+    tasa_compress = "-No hay tasa de compresión ya que no se comprime el archivo porque solo se transmite un caracter"
+    print(tasa_compress)
+else:
+    tasa_compress = tamaño_new/tamaño_original  #Se calcula la tasa de compresión
+    print("-La tasa de compresión es del : ", tasa_compress )
