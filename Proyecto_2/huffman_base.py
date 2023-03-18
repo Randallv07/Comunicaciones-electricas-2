@@ -2,8 +2,8 @@ import os
 import sys
 import getopt
 import csv
+import math
 from math import log2
-import struct
 
 # Parametros de entrada y ayuda:
 file_full_path = ""
@@ -37,11 +37,11 @@ if __name__ == "__main__":
 file_huffman_comprimido = file_full_path+".huffman"
 ruta_diccionario = file_full_path+".diccionario.csv"
 recovered_path = os.path.join(file_split_path[0], "recovered_"+file_split_path[1]);
-#-----------------------------------------------------
-# Algorithmo de compresión de huffman
-#-----------------------------------------------------
+#-----------------------------------------------------------
+#-                2.2-ALGORITMO DE HUFFMAN       -
+#-----------------------------------------------------------
 #Apertura y lectura del archivo
-string=[];
+string=[]
 with open(file_full_path, "rb") as f:
     while (byte := f.read(1)):
         # Do stuff with byte.
@@ -140,42 +140,121 @@ else:
     n_new  = H/L       #Se calcula la eficiencia del código nuevo 
 
 
-print("La entropia de la fuente es:",H)
-print("La longitud media del código es:",L)
-print("La varianza del código es:",sigma)
-print("La eficiencia del código original:",n_orig)
-print("La eficiencia de nuevo código:",n_new)
+print("-La entropia de la fuente es:",H)
+print("-La longitud media del código es:",L)
+print("-La varianza del código es:",sigma)
+print("-La eficiencia del código original:",n_orig)
+print("-La eficiencia de nuevo código:",n_new)
 
-binary_string = [];
-for c in string :
+
+#-----------------------------------------------------------
+#-      2.3-COMPRESION POR MEDIO DEL CODIGO DE HUFFMAN        -
+#-----------------------------------------------------------
+
+binary_string = []
+for c in string:
     binary_string += huffmanCode[c]
 
 compressed_length_bit = len(binary_string)
-if (compressed_length_bit %8 >0) :
+
+if(compressed_length_bit %8>0):
     for i in range(8 - len(binary_string) % 8):
         binary_string += '0'
-        
-byte_string="".join ([str(i) for i in binary_string])
-byte_string=[byte_string[i:i+8] for i in range (0, len(byte_string),8)];
 
-Lista_byte = [byte.encode() for byte in byte_string]
+byte_string="".join([str(i) for i in binary_string])
+byte_string=[byte_string[i:i+8] for i in range(0, len(byte_string), 8)]
 
+
+
+lista_bytes = [byte.encode() for byte in byte_string]   #Convierte los datos comprimidos a una lista de datos tipo byte
+
+#Genera el archivo .bin
 with open(file_huffman_comprimido, 'wb') as archivo_binario:
-    for byte in Lista_byte:
+    for byte in lista_bytes:
         archivo_binario.write(byte)
 
-#print(Lista_byte)
-print(type(Lista_byte[1]))
-
-sin_compresion = len(string)
-
-csvfile=open(ruta_diccionario,'w')
-writer=csv.writer(csvfile)
-writer.writerow([str(compressed_length_bit/8),"bits comprimidos"])
-writer.writerow([str(sin_compresion),"bits sin comprimir"])
-writer.writerow([str((compressed_length_bit/8)/sin_compresion*100)," por ciento de tasa de compresión"])
+#Genera el archivo csv
+csvfile = open ( ruta_diccionario , 'w')
+writer = csv.writer ( csvfile )
+writer . writerow ([ str ( compressed_length_bit ) ,"bits"])
 
 for entrada in huffmanCode :
-    writer.writerow([str(entrada), huffmanCode[entrada]])
+   writer.writerow ([str(entrada) , huffmanCode [ entrada ]])
+
+csvfile.close ()
+
+
+#Tamaño del archivo original y el archivo comprimido
+tamaño_original = os.path.getsize(file_full_path) 
+print("-El tamaño original del archivo es:", tamaño_original, "bytes")
+tamaño_new = math.floor(compressed_length_bit/8)   #pasa el tamaño a bytes
+print("-El tamaño del archivo comprimido es",tamaño_new,"bytes")
+
+
+if tamaño_original == tamaño_new:
+    tasa_compress = "-No hay tasa de compresión ya que no se comprime el archivo porque solo se transmite un caracter"
+    print(tasa_compress)
+else:
+    tasa_compress = tamaño_new/tamaño_original  #Se calcula la tasa de compresión
+    print("-La tasa de compresión es del : ", tasa_compress )
+
+
+
+#-----------------------------------------------------------
+#-      2.4-RESTABLECIMIENTO DE LOS DATOS ORIGINALES-DESCOMPRESIÓN        -
+#-----------------------------------------------------------    
+csvfile = open ( ruta_diccionario , 'r')
+reader = csv.reader(csvfile)
+bits_a_leer = None
+diccionario = dict ()
+
+for row in reader:
+    if (bits_a_leer ==None):
+        bits_a_leer = int(row[0])
+
+    else:
+        diccionario.update ({int(row[0]):row[1]})
+
+Decoding = NodeTree (None, None)
+for entrada in diccionario:
+    insert_in_tree(Decoding, diccionario[entrada], entrada)
+
+nodo = Decoding
+data_estimated = []
+for i in range (compressed_length_bit):
+    (l,r) = nodo.children ()
+    #print ([i , binary_string[i]])
+    if (binary_string[i] == '1'):
+        nodo = r
+    else:
+        nodo = l
     
-csvfile . close ()
+    if type(nodo) is int:
+        data_estimated.append(nodo)
+        #print([i, nodo])
+        nodo = Decoding
+
+
+if string==data_estimated:
+    print("Los datos estimados corresponden a los datos originales de la fuente")
+else:
+    print("Los datos no corresponden")
+
+print(type(data_estimated[1]))
+
+#lista_bytes2 = bytes([i for i in data_estimated])   #Convierte los datos comprimidos a una lista de datos tipo byte
+byte_recovered = []
+
+for dato in data_estimated:
+    byte_recovered.append(dato.to_bytes(1, byteorder='big'))
+
+print(type(byte_recovered[1]))
+
+#Genera el archivo .bin
+with open(recovered_path, 'wb') as archivo_binario:
+    for byte in byte_recovered:
+     archivo_binario.write(byte)
+
+#-----------------------------------------------------------
+#-      2.5-EFECTO DE LA ENTROPÍA EN LA FUENTE        -
+#-----------------------------------------------------------
