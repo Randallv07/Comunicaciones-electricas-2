@@ -241,6 +241,23 @@ else:
     print("Los datos no corresponden")
 
 
+
+
+#Se convierten los datos estimados a bytes
+estimado_bin = []
+
+for i in data_estimated:
+    estimado_bin.append(i.to_bytes(1, byteorder='big'))
+
+#Genera el archivo recuperado
+with open(recovered_path, 'wb') as archivo_binario:
+    for byte in estimado_bin:
+        archivo_binario.write(byte)
+
+
 #-----------------------------------------------------------
 #-      2.5-EFECTO DE LA ENTROPÍA EN LA FUENTE        -
 #-----------------------------------------------------------
+
+#Este punto fue ejecutado en consola y el resultado obtenido se muestra en el informe
+# de igual forma que las preguntas de teoria#
