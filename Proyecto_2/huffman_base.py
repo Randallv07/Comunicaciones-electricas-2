@@ -37,9 +37,9 @@ if __name__ == "__main__":
 file_huffman_comprimido = file_full_path+".huffman"
 ruta_diccionario = file_full_path+".diccionario.csv"
 recovered_path = os.path.join(file_split_path[0], "recovered_"+file_split_path[1]);
-#-----------------------------------------------------
-# Algorithmo de compresión de huffman
-#-----------------------------------------------------
+#-----------------------------------------------------------
+#-                2.2-ALGORITMO DE HUFFMAN       -
+#-----------------------------------------------------------
 #Apertura y lectura del archivo
 string=[];
 with open(file_full_path, "rb") as f:
@@ -148,7 +148,7 @@ print("-La eficiencia de nuevo código:",n_new)
 
 
 #-----------------------------------------------------------
-#-       COMPRESION POR MEDIO DEL CODIGO DE HUFFMAN        -
+#-      2.3-COMPRESION POR MEDIO DEL CODIGO DE HUFFMAN        -
 #-----------------------------------------------------------
 
 binary_string = []
@@ -197,3 +197,44 @@ if tamaño_original == tamaño_new:
 else:
     tasa_compress = tamaño_new/tamaño_original  #Se calcula la tasa de compresión
     print("-La tasa de compresión es del : ", tasa_compress )
+
+
+
+#-----------------------------------------------------------
+#-      2.4-RESTABLECIMIENTO DE LOS DATOS ORIGINALES-DESCOMPRESIÓN        -
+#-----------------------------------------------------------    
+csvfile = open ( ruta_diccionario , 'r')
+reader = csv . reader ( csvfile )
+bits_a_leer = None
+diccionario = dict ()
+
+for row in reader:
+    if (bits_a_leer ==None):
+        bits_a_leer = int(row[0])
+
+    else:
+        diccionario.update ({int(row[0]):row[1]})
+
+Decoding = NodeTree (None, None)
+for entrada in diccionario:
+    insert_in_tree(Decoding, diccionario[entrada], entrada)
+
+nodo = Decoding
+data_estimated = []
+for i in range (compressed_length_bit):
+    (l,r) = nodo.children ()
+    #print ([i , binary_string[i]])
+    if (binary_string[i] == '1'):
+        nodo = 1
+    else:
+        nodo = 1
+    
+    if type(nodo) is int:
+        data_estimated.append(nodo)
+        #print([i, nodo])
+        nodo = Decoding
+
+
+#-----------------------------------------------------------
+#-      2.5-EFECTO DE LA ENTROPÍA EN LA FUENTE        -
+#-----------------------------------------------------------
