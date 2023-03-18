@@ -184,7 +184,10 @@ if(compressed_length_bit %8>0):
 byte_string="".join([str(i) for i in binary_string])
 byte_string=[byte_string[i:i+8] for i in range(0, len(byte_string), 8)]
 
-# Codigo para el punto 2.3.2
+##############################
+# Codigo para el punto 2.3.2 #
+##############################
+
 binary_bytes = [byte.encode() for byte in byte_string]
 
 with open(file_huffman_comprimido,'wb') as archivo_binario:
@@ -252,10 +255,35 @@ for i in range(compressed_length_bit):
     if(binary_string[i]=='1'):
         nodo = r
     else:
-        nodo = 1
+        nodo = l
 
     if type(nodo) is int:
         data_estimated.append(nodo)
         #print([i, nodo])
         nodo = Decoding
+
+##############################
+# Codigo para el punto 2.4.2 #
+##############################
+
+#print(len(string))
+#print(len(data_estimated))
+
+msg = "Al comparar los datos estimados con respecto a los originales se tiene que: \n"
+
+if string==data_estimated:
+    print(msg,"Los datos son iguales")
+else:
+    print(msg,"Los datos no son iguales")
+
+##############################
+# Codigo para el punto 2.4.3 #
+##############################
+
+byte_data_estimated = [byte.to_bytes(1, byteorder='big') for byte in data_estimated]
+
+with open(recovered_path,'wb') as descompresion:
+    for byte in binary_bytes:
+        descompresion.write(byte)
+
 
