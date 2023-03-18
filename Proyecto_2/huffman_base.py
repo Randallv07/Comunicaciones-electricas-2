@@ -41,7 +41,7 @@ recovered_path = os.path.join(file_split_path[0], "recovered_"+file_split_path[1
 #-                2.2-ALGORITMO DE HUFFMAN       -
 #-----------------------------------------------------------
 #Apertura y lectura del archivo
-string=[];
+string=[]
 with open(file_full_path, "rb") as f:
     while (byte := f.read(1)):
         # Do stuff with byte.
@@ -204,7 +204,7 @@ else:
 #-      2.4-RESTABLECIMIENTO DE LOS DATOS ORIGINALES-DESCOMPRESIÓN        -
 #-----------------------------------------------------------    
 csvfile = open ( ruta_diccionario , 'r')
-reader = csv . reader ( csvfile )
+reader = csv.reader(csvfile)
 bits_a_leer = None
 diccionario = dict ()
 
@@ -225,14 +225,20 @@ for i in range (compressed_length_bit):
     (l,r) = nodo.children ()
     #print ([i , binary_string[i]])
     if (binary_string[i] == '1'):
-        nodo = 1
+        nodo = r
     else:
-        nodo = 1
+        nodo = l
     
     if type(nodo) is int:
         data_estimated.append(nodo)
         #print([i, nodo])
         nodo = Decoding
+
+
+if string==data_estimated:
+    print("Los datos estimados corresponden a los datos originales de la fuente")
+else:
+    print("Los datos no corresponden")
 
 
 #-----------------------------------------------------------
