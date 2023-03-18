@@ -41,7 +41,7 @@ recovered_path = os.path.join(file_split_path[0], "recovered_"+file_split_path[1
 #-                2.2-ALGORITMO DE HUFFMAN       -
 #-----------------------------------------------------------
 #Apertura y lectura del archivo
-string=[];
+string=[]
 with open(file_full_path, "rb") as f:
     while (byte := f.read(1)):
         # Do stuff with byte.
@@ -204,7 +204,7 @@ else:
 #-      2.4-RESTABLECIMIENTO DE LOS DATOS ORIGINALES-DESCOMPRESIÓN        -
 #-----------------------------------------------------------    
 csvfile = open ( ruta_diccionario , 'r')
-reader = csv . reader ( csvfile )
+reader = csv.reader(csvfile)
 bits_a_leer = None
 diccionario = dict ()
 
@@ -225,9 +225,9 @@ for i in range (compressed_length_bit):
     (l,r) = nodo.children ()
     #print ([i , binary_string[i]])
     if (binary_string[i] == '1'):
-        nodo = 1
+        nodo = r
     else:
-        nodo = 1
+        nodo = l
     
     if type(nodo) is int:
         data_estimated.append(nodo)
@@ -235,6 +235,29 @@ for i in range (compressed_length_bit):
         nodo = Decoding
 
 
+if string==data_estimated:
+    print("Los datos estimados corresponden a los datos originales de la fuente")
+else:
+    print("Los datos no corresponden")
+
+
+
+
+#Se convierten los datos estimados a bytes
+estimado_bin = []
+
+for i in data_estimated:
+    estimado_bin.append(i.to_bytes(1, byteorder='big'))
+
+#Genera el archivo recuperado
+with open(recovered_path, 'wb') as archivo_binario:
+    for byte in estimado_bin:
+        archivo_binario.write(byte)
+
+
 #-----------------------------------------------------------
 #-      2.5-EFECTO DE LA ENTROPÍA EN LA FUENTE        -
 #-----------------------------------------------------------
+
+#Este punto fue ejecutado en consola y el resultado obtenido se muestra en el informe
+# de igual forma que las preguntas de teoria#
