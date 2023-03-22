@@ -37,6 +37,7 @@ if __name__ == "__main__":
 file_huffman_comprimido = file_full_path+".huffman"
 ruta_diccionario = file_full_path+".diccionario.csv"
 recovered_path = os.path.join(file_split_path[0], "recovered_"+file_split_path[1]);
+
 #-----------------------------------------------------------
 #-                2.2-ALGORITMO DE HUFFMAN       -
 #-----------------------------------------------------------
@@ -92,7 +93,7 @@ def huffman_code_tree(node, left=True, binString=''):
     return d
     
 
-# calculo de frecuencias y probabilidades
+# Calculo de frecuencias y probabilidades
 prob_unit = 1/len(string)
 freq = {}
 for c in string:
@@ -132,19 +133,19 @@ sigma=0
 for (char, frequency) in freq:
     sigma = frequency*(len(huffmanCode[char])-L)**2+sigma  #Se calcula la varianza del código
 
-n_orig = H/8       #Se calcula la eficiencia con el código original, los caracy¿teres siempre son de 8 bits
+n_orig = H/8       #Se calcula la eficiencia con el código original, los caracteres siempre son de 8 bits
 
 if L==0:
     n_new = "No aplica ya que solo se está enviando un único caracter"
 else:
-    n_new  = H/L       #Se calcula la eficiencia del código nuevo 
+    n_new  = H/L   #Se calcula la eficiencia del código nuevo 
 
 
-print("-La entropia de la fuente es:",H)
-print("-La longitud media del código es:",L)
-print("-La varianza del código es:",sigma)
-print("-La eficiencia del código original:",n_orig)
-print("-La eficiencia de nuevo código:",n_new)
+print("-La entropia de la fuente es:",H)    # Se muestra el valor de la entropia de la fuente
+print("-La longitud media del código es:",L) # Se muestra el valor de la longitud promedio del codigo nuevo
+print("-La varianza del código es:",sigma)  #Se muestra la varianza del código nuevo
+print("-La eficiencia del código original:",n_orig) #Se muestra la eficiencia del código original
+print("-La eficiencia de nuevo código:",n_new) #Se muestra la eficiencia del código nuevo
 
 
 #-----------------------------------------------------------
@@ -184,13 +185,14 @@ for entrada in huffmanCode :
 csvfile.close ()
 
 
-#Tamaño del archivo original y el archivo comprimido
+#Se guarda el valor del tamaño del archivo original y el de el archivo comprimido
 tamaño_original = os.path.getsize(file_full_path) 
 print("-El tamaño original del archivo es:", tamaño_original, "bytes")
-tamaño_new = math.floor(compressed_length_bit/8)   #pasa el tamaño a bytes
+tamaño_new = math.floor(compressed_length_bit/8)   #Pasa el tamaño a bytes
 print("-El tamaño del archivo comprimido es",tamaño_new,"bytes")
 
 
+#Condición por si no hay tasa de compresión
 if tamaño_original == tamaño_new:
     tasa_compress = "-No hay tasa de compresión ya que no se comprime el archivo porque solo se transmite un caracter"
     print(tasa_compress)
@@ -201,7 +203,7 @@ else:
 
 
 #-----------------------------------------------------------
-#-      2.4-RESTABLECIMIENTO DE LOS DATOS ORIGINALES-DESCOMPRESIÓN        -
+#-    2.4-RESTABLECIMIENTO DE LOS DATOS ORIGINALES-DESCOMPRESIÓN        -
 #-----------------------------------------------------------    
 csvfile = open ( ruta_diccionario , 'r')
 reader = csv.reader(csvfile)
@@ -241,8 +243,6 @@ else:
     print("Los datos no corresponden")
 
 
-
-
 #Se convierten los datos estimados a bytes
 estimado_bin = []
 
@@ -259,5 +259,6 @@ with open(recovered_path, 'wb') as archivo_binario:
 #-      2.5-EFECTO DE LA ENTROPÍA EN LA FUENTE        -
 #-----------------------------------------------------------
 
-#Este punto fue ejecutado en consola y el resultado obtenido se muestra en el informe
-# de igual forma que las preguntas de teoria#
+#Este punto fue elaborado apartir de ejecutar el código desarrollado en consola e ingresar como parámetro
+# el archivo que se desea comprimir.
+# El resultado obtenido se muestra en el informe de igual forma que las respuestas a las preguntas de teoria
